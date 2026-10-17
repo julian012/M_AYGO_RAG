@@ -1,0 +1,39 @@
+# Arquitectura de Software
+
+La arquitectura de software es la organización fundamental de un sistema: sus componentes, las relaciones entre ellos y con el entorno, y los principios que guían su diseño y evolución. Una buena arquitectura facilita atributos de calidad como escalabilidad, disponibilidad, seguridad, mantenibilidad y rendimiento.
+
+Un estilo arquitectónico describe un patrón recurrente de organización. Ejemplos comunes son capas (layered), cliente-servidor, microservicios, orientada a eventos y hexagonal (puertos y adaptadores).
+
+# Microservicios
+
+Los microservicios son un estilo arquitectónico en el que una aplicación se compone de servicios pequeños, independientes y desplegables por separado. Cada servicio es responsable de una capacidad de negocio y se comunica con otros mediante APIs HTTP/REST, gRPC o mensajería asíncrona. Ventajas: escalado independiente, despliegues frecuentes y autonomía de equipos. Desventajas: complejidad operativa, consistencia eventual y mayor necesidad de observabilidad.
+
+# Gobernabilidad de la Arquitectura
+
+La gobernabilidad (governance) de la arquitectura es el conjunto de procesos, roles, políticas y métricas que aseguran que las decisiones técnicas se alineen con la estrategia de la organización. Incluye los Architecture Decision Records (ADR), comités de revisión de arquitectura, estándares tecnológicos y verificaciones automáticas (fitness functions) que miden si el sistema conserva sus atributos de calidad a lo largo del tiempo.
+
+Un ADR documenta una decisión arquitectónica: contexto, decisión tomada, alternativas consideradas y consecuencias.
+
+# Retrieval-Augmented Generation (RAG)
+
+RAG es una técnica que combina recuperación de información con modelos de lenguaje generativos. En lugar de depender solo del conocimiento parametrizado del modelo, el sistema recupera fragmentos relevantes de una base de conocimiento externa y los incluye en el prompt como contexto. Esto reduce las alucinaciones, permite citar fuentes y mantener el conocimiento actualizado sin reentrenar el modelo.
+
+Un pipeline RAG típico tiene dos fases. Indexación: cargar documentos, dividirlos en fragmentos (chunks), calcular embeddings y guardarlos en un almacén vectorial. Consulta: convertir la pregunta en un embedding, buscar los fragmentos más similares, construir el prompt con ese contexto y generar la respuesta con un LLM.
+
+# Embeddings y búsqueda vectorial
+
+Un embedding es una representación numérica densa de un texto en un espacio vectorial, de modo que textos con significado similar quedan cerca. La similitud se mide normalmente con coseno, producto punto o distancia euclidiana. El modelo text-embedding-3-small de OpenAI genera vectores de 1536 dimensiones.
+
+Buscar en grandes volúmenes requiere índices de vecinos más cercanos aproximados (ANN) como HNSW o IVF, que sacrifican algo de exactitud por mucha velocidad.
+
+# Pinecone
+
+Pinecone es una base de datos vectorial administrada (managed) y nativa de la nube. Ofrece índices serverless que escalan automáticamente, persistencia, filtrado por metadatos, namespaces para separar datos por inquilino o colección, y búsqueda de baja latencia sobre millones o miles de millones de vectores. Al crear un índice se define la dimensión de los vectores y la métrica de similitud (cosine, dotproduct o euclidean). La dimensión debe coincidir con la del modelo de embeddings.
+
+A diferencia de un almacén en memoria, los datos en Pinecone persisten entre ejecuciones y pueden ser compartidos por múltiples aplicaciones.
+
+# LangChain
+
+LangChain es un framework para construir aplicaciones con LLMs. Provee abstracciones para modelos de chat, embeddings, cargadores de documentos, divisores de texto, almacenes vectoriales, retrievers y prompts. Con LangChain Expression Language (LCEL) las piezas se componen con el operador pipe (|) formando cadenas, por ejemplo: retriever | prompt | llm | parser.
+
+Los paquetes de integración se publican por separado, como langchain-openai y langchain-pinecone.

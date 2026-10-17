@@ -1,0 +1,15 @@
+deepagents
+langchain>=1.0
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-openai
+langchain-pinecone
+pinecone>=5.0
+requests
+python-dotenv
+jupyter
+ipykernel
+# Solo si EMBEDDINGS_PROVIDER=local
+langchain-huggingface
+sentence-transformers
